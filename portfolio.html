@@ -1,1 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <title>MOOMERKONES — Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0E1116;
+      --panel: #161B22;
+      --line: rgba(231,226,214,0.10);
+      --ink: #E7E2D6;
+      --muted: #8A93A6;
+      --amber: #E8A33D;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+    }
+
+    main {
+      width: min(880px, calc(100% - 40px));
+      margin: auto;
+      padding: 55px 0 100px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 100px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+    }
+
+    nav a:hover {
+      color: var(--amber);
+    }
+
+    .name {
+      color: var(--ink);
+      letter-spacing: .12em;
+    }
+
+    .links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .eyebrow {
+      color: var(--amber);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(48px, 9vw, 90px);
+      line-height: .95;
+      letter-spacing: -.05em;
+      margin: 16px 0 30px;
+    }
+
+    .intro {
+      color: var(--muted);
+      max-width: 600px;
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 100px;
+    }
+
+    .project {
+      border-top: 1px solid var(--line);
+      padding: 50px 0;
+    }
+
+    .number {
+      color: var(--amber);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+    }
+
+    h2 {
+      font-size: clamp(32px, 6vw, 58px);
+      margin: 12px 0;
+      letter-spacing: -.03em;
+    }
+
+    .project p {
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .project a {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--ink);
+      text-decoration: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+    }
+
+    .project a:hover {
+      color: var(--amber);
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+
+    <nav>
+      <a class="name" href="/">MOOMERKONES</a>
+
+      <div class="links">
+        <a href="/">Experiments</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="https://github.com/moomerkones">GitHub ↗</a>
+      </div>
+    </nav>
+
+    <p class="eyebrow">Portfolio</p>
+
+    <h1>Selected work.</h1>
+
+    <p class="intro">
+      Scientific computing, computational experiments,
+      and technical projects.
+    </p>
+
+    <section class="project">
+      <span class="number">001</span>
+      <h2>Echo Network</h2>
+      <p>
+        A browser-based neuroevolution experiment exploring
+        mutation, selection, and evolving network structure.
+      </p>
+      <a href="/">View experiment →</a>
+    </section>
+
+    <section class="project">
+      <span class="number">002</span>
+      <h2>Future Project</h2>
+      <p>
+        Reserved for another experiment, research project,
+        simulation, or piece of software.
+      </p>
+    </section>
+
+    <section class="project">
+      <span class="number">003</span>
+      <h2>Future Project</h2>
+      <p>
+        Reserved for future work.
+      </p>
+    </section>
+
+  </main>
+</body>
+</html>

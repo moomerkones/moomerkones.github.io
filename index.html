@@ -3,672 +3,1706 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Echo Network — live neuroevolution</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<title>MOOMERKONES</title>
+
 <style>
-  :root{
-    --bg:#0E1116;
-    --panel:#161B22;
-    --panel-2:#12161C;
-    --line:rgba(231,226,214,0.10);
-    --line-soft:rgba(231,226,214,0.06);
-    --ink:#E7E2D6;
-    --muted:#8A93A6;
-    --amber:#E8A33D;
-    --teal:#4FC7B5;
-    --rose:#D9707B;
-    --violet:#8B7FD6;
-    --radius:16px;
-    --radius-sm:10px;
+:root {
+  --bg: #0e1116;
+  --panel: #151a21;
+  --ink: #e7e2d6;
+  --muted: #8992a4;
+  --line: rgba(231,226,214,.12);
+  --amber: #e8a33d;
+  --teal: #4fc7b5;
+  --rose: #d9707b;
+  --violet: #8b7fd6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--amber);
+}
+
+.mono {
+  font-family: "Courier New", monospace;
+}
+
+/* ---------- PAGE ---------- */
+
+.page {
+  width: min(900px, calc(100% - 40px));
+  margin: auto;
+}
+
+/* ---------- NAV ---------- */
+
+nav {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.brand {
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  letter-spacing: .14em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------- INTRO ---------- */
+
+.intro {
+  padding: 100px 0 140px;
+}
+
+.eyebrow {
+  font-family: "Courier New", monospace;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  font-size: 11px;
+  color: var(--amber);
+}
+
+h1 {
+  margin: 20px 0 30px;
+  max-width: 800px;
+  font-size: clamp(50px, 10vw, 100px);
+  line-height: .92;
+  letter-spacing: -.055em;
+  font-weight: 600;
+}
+
+.intro-text {
+  max-width: 620px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+/* ---------- PROJECT ---------- */
+
+.projects-title {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--muted);
+}
+
+.project {
+  padding: 70px 0 120px;
+}
+
+.project-number {
+  font-family: "Courier New", monospace;
+  color: var(--amber);
+  font-size: 11px;
+}
+
+.project h2 {
+  margin: 10px 0;
+  font-size: clamp(42px, 8vw, 74px);
+  letter-spacing: -.045em;
+  line-height: 1;
+}
+
+.project-description {
+  max-width: 650px;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+
+/* ---------- ECHO ---------- */
+
+.echo-widget {
+  border-top: 1px solid var(--line);
+  padding-top: 30px;
+}
+
+.echo-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.echo-head h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.echo-status {
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  color: var(--amber);
+}
+
+.echo-stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.echo-panel {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.echo-panel-label {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  z-index: 2;
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.echo-panel canvas,
+.echo-panel svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.echo-readout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 14px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.echo-stat {
+  padding: 14px;
+  border-right: 1px solid var(--line);
+}
+
+.echo-stat:last-child {
+  border-right: none;
+}
+
+.echo-stat-label {
+  display: block;
+  color: var(--muted);
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.echo-stat-value {
+  font-family: "Courier New", monospace;
+  font-size: 17px;
+}
+
+.echo-stat-value.accent {
+  color: var(--amber);
+}
+
+.echo-spark {
+  height: 55px;
+  margin-top: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.echo-spark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.echo-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 20px;
+  flex-wrap: wrap;
+}
+
+.echo-buttons {
+  display: flex;
+  gap: 24px;
+}
+
+/* intentionally plain text controls */
+
+.echo-btn {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+}
+
+.echo-btn:hover {
+  color: var(--amber);
+}
+
+.echo-task {
+  color: var(--muted);
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+}
+
+.echo-caption {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 30px;
+  max-width: 760px;
+}
+
+/* ---------- FOOTER ---------- */
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 40px 0 80px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 650px) {
+  nav {
+    align-items: flex-start;
+    padding-top: 25px;
   }
 
-  *{ box-sizing:border-box; }
-
-  .echo-widget{
-    --w-bg:var(--bg);
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Space Grotesk', system-ui, sans-serif;
-    border-radius:var(--radius);
-    padding:clamp(18px, 3vw, 32px);
-    border:1px solid var(--line);
-    background-image:
-      linear-gradient(var(--line-soft) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
-    background-size: 28px 28px;
-    max-width: 880px;
-    margin: 0 auto;
+  .nav-links {
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
   }
 
-  .echo-widget *{ box-sizing:border-box; }
-
-  .echo-mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; }
-
-  .echo-head{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:16px;
-    margin-bottom:20px;
-    flex-wrap:wrap;
+  .intro {
+    padding: 80px 0 100px;
   }
 
-  .echo-eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.16em;
-    text-transform:uppercase;
-    color:var(--amber);
-    margin:0 0 6px 0;
+  .echo-stage {
+    grid-template-columns: 1fr;
   }
 
-  .echo-title{
-    font-size:clamp(20px, 3vw, 26px);
-    font-weight:600;
-    margin:0 0 6px 0;
-    letter-spacing:-0.01em;
+  .echo-readout {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .echo-sub{
-    font-size:14px;
-    color:var(--muted);
-    margin:0;
-    max-width:46ch;
+  .echo-stat:nth-child(2) {
+    border-right: none;
   }
-
-  .echo-pill{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.1em;
-    color:var(--muted);
-    border:1px solid var(--line);
-    background:var(--panel);
-    padding:6px 12px;
-    border-radius:999px;
-    white-space:nowrap;
-  }
-
-  .echo-dot{
-    width:7px; height:7px; border-radius:50%;
-    background:var(--muted);
-    flex:none;
-  }
-
-  .echo-pill.is-live{ color:var(--amber); }
-  .echo-pill.is-live .echo-dot{
-    background:var(--amber);
-    animation: echo-pulse 1.6s ease-in-out infinite;
-  }
-
-  @keyframes echo-pulse{
-    0%,100%{ opacity:1; box-shadow:0 0 0 0 rgba(232,163,61,0.5); }
-    50%{ opacity:0.55; box-shadow:0 0 0 4px rgba(232,163,61,0); }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .echo-pill.is-live .echo-dot{ animation:none; }
-  }
-
-  .echo-stage{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-    margin-bottom:16px;
-  }
-
-  @media (max-width:640px){
-    .echo-stage{ grid-template-columns:1fr; }
-  }
-
-  .echo-panel{
-    position:relative;
-    background:var(--panel-2);
-    border:1px solid var(--line);
-    border-radius:var(--radius-sm);
-    aspect-ratio:1;
-    overflow:hidden;
-  }
-
-  .echo-panel-label{
-    position:absolute;
-    top:10px; left:12px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--muted);
-    z-index:2;
-    pointer-events:none;
-  }
-
-  .echo-panel canvas,
-  .echo-panel svg{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    display:block;
-  }
-
-  .echo-readout{
-    display:flex;
-    flex-wrap:wrap;
-    gap:0;
-    border:1px solid var(--line);
-    border-radius:var(--radius-sm);
-    background:var(--panel);
-    margin-bottom:16px;
-    overflow:hidden;
-  }
-
-  .echo-stat{
-    flex:1 1 auto;
-    min-width:88px;
-    padding:10px 16px;
-    border-right:1px solid var(--line);
-  }
-  .echo-stat:last-child{ border-right:none; }
-
-  .echo-stat-label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10px;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color:var(--muted);
-    display:block;
-    margin-bottom:3px;
-  }
-
-  .echo-stat-value{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:17px;
-    font-weight:500;
-    color:var(--ink);
-  }
-
-  .echo-stat-value.echo-accent{ color:var(--amber); }
-
-  .echo-spark{
-    border:1px solid var(--line);
-    border-radius:var(--radius-sm);
-    background:var(--panel);
-    height:56px;
-    margin-bottom:20px;
-    overflow:hidden;
-  }
-  .echo-spark svg{ width:100%; height:100%; display:block; }
-
-  .echo-controls{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:12px;
-  }
-
-  .echo-btns{ display:flex; gap:10px; }
-
-  .echo-btn{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    letter-spacing:0.04em;
-    color:var(--ink);
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:999px;
-    padding:9px 18px;
-    cursor:pointer;
-    transition:border-color 0.15s ease, background 0.15s ease;
-  }
-  .echo-btn:hover{ border-color:rgba(232,163,61,0.5); }
-  .echo-btn:focus-visible{
-    outline:2px solid var(--amber);
-    outline-offset:2px;
-  }
-  .echo-btn.is-primary{
-    border-color:rgba(232,163,61,0.4);
-    color:var(--amber);
-  }
-
-  .echo-task{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--muted);
-    letter-spacing:0.06em;
-  }
-  .echo-task b{ color:var(--ink); font-weight:500; }
-
-  .echo-caption{
-    margin-top:18px;
-    padding-top:14px;
-    border-top:1px solid var(--line-soft);
-    font-size:12px;
-    color:var(--muted);
-    line-height:1.5;
-  }
-  .echo-caption a{ color:var(--muted); }
-  .echo-caption a:hover{ color:var(--amber); }
+}
 </style>
 </head>
-<body style="margin:0; background:#0E1116; padding:24px 12px;">
 
-<div class="echo-widget" id="echoWidget">
+<body>
 
-  <div class="echo-head">
-    <div>
-      <p class="echo-eyebrow">Echo Network</p>
-      <h2 class="echo-title">A tiny neural net, evolving live</h2>
-      <p class="echo-sub">No training data pass, no backprop — just mutation and selection reshaping one connection matrix, generation by generation, in your browser.</p>
-    </div>
-    <span class="echo-pill is-live" id="statusPill"><span class="echo-dot"></span><span id="statusText">LIVE</span></span>
-  </div>
+<div class="page">
 
-  <div class="echo-stage">
-    <div class="echo-panel">
-      <span class="echo-panel-label" id="taskLabel">Decision boundary — rings</span>
-      <canvas id="boundaryCanvas" width="600" height="600"></canvas>
-    </div>
-    <div class="echo-panel">
-      <span class="echo-panel-label">Connection matrix</span>
-      <svg id="graphSvg" viewBox="0 0 300 300"></svg>
-    </div>
-  </div>
+  <nav>
+    <a class="brand" href="/">MOOMERKONES</a>
 
-  <div class="echo-readout">
-    <div class="echo-stat">
-      <span class="echo-stat-label">Generation</span>
-      <span class="echo-stat-value echo-mono" id="statGen">0000</span>
+    <div class="nav-links">
+      <a href="#projects">Projects</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="https://github.com/moomerkones">GitHub ↗</a>
     </div>
-    <div class="echo-stat">
-      <span class="echo-stat-label">Accuracy</span>
-      <span class="echo-stat-value echo-accent echo-mono" id="statAcc">0.0%</span>
-    </div>
-    <div class="echo-stat">
-      <span class="echo-stat-label">Neurons</span>
-      <span class="echo-stat-value echo-mono" id="statN">00</span>
-    </div>
-    <div class="echo-stat">
-      <span class="echo-stat-label">Weights</span>
-      <span class="echo-stat-value echo-mono" id="statW">000</span>
-    </div>
-  </div>
+  </nav>
 
-  <div class="echo-spark"><svg id="sparkSvg" viewBox="0 0 600 56" preserveAspectRatio="none"></svg></div>
 
-  <div class="echo-controls">
-    <div class="echo-btns">
-      <button class="echo-btn is-primary" id="playBtn" type="button">⏸ Pause</button>
-      <button class="echo-btn" id="resetBtn" type="button">↻ New pattern</button>
+  <header class="intro">
+
+    <p class="eyebrow">
+      Scientific computing / experiments
+    </p>
+
+    <h1>
+      Computational experiments and scientific systems.
+    </h1>
+
+    <p class="intro-text">
+      A collection of small experiments exploring computation,
+      modelling, algorithms, and evolving systems.
+    </p>
+
+  </header>
+
+
+  <main id="projects">
+
+    <div class="projects-title">
+      SELECTED EXPERIMENTS
     </div>
-    <span class="echo-task">population <b>40</b> · elite <b>4</b> · mutation-only evolution</span>
-  </div>
 
-  <p class="echo-caption">Inspired by Kroos &amp; Küch, <em>Introducing Echo Networks for Computational Neuroevolution</em> (2026) — a recurrent network fully defined by a single connection matrix, evolved rather than trained. This demo runs a simplified, browser-friendly version of that idea on a toy 2D pattern instead of the original ECG task.</p>
+
+    <article class="project" id="echo-network">
+
+      <span class="project-number">001 / LIVE</span>
+
+      <h2>Echo Network</h2>
+
+      <p class="project-description">
+        A small neural network evolving directly in the browser.
+        Mutation and selection alter its connection matrix while
+        the network attempts to classify changing spatial patterns.
+      </p>
+
+
+      <div class="echo-widget">
+
+        <div class="echo-head">
+          <h3>Live neuroevolution</h3>
+
+          <span class="echo-status" id="statusText">
+            LIVE
+          </span>
+        </div>
+
+
+        <div class="echo-stage">
+
+          <div class="echo-panel">
+            <span class="echo-panel-label" id="taskLabel">
+              Decision boundary — rings
+            </span>
+
+            <canvas
+              id="boundaryCanvas"
+              width="600"
+              height="600">
+            </canvas>
+          </div>
+
+
+          <div class="echo-panel">
+            <span class="echo-panel-label">
+              Connection matrix
+            </span>
+
+            <svg
+              id="graphSvg"
+              viewBox="0 0 300 300">
+            </svg>
+          </div>
+
+        </div>
+
+
+        <div class="echo-readout">
+
+          <div class="echo-stat">
+            <span class="echo-stat-label">Generation</span>
+            <span class="echo-stat-value" id="statGen">0000</span>
+          </div>
+
+          <div class="echo-stat">
+            <span class="echo-stat-label">Accuracy</span>
+            <span class="echo-stat-value accent" id="statAcc">0.0%</span>
+          </div>
+
+          <div class="echo-stat">
+            <span class="echo-stat-label">Neurons</span>
+            <span class="echo-stat-value" id="statN">00</span>
+          </div>
+
+          <div class="echo-stat">
+            <span class="echo-stat-label">Weights</span>
+            <span class="echo-stat-value" id="statW">000</span>
+          </div>
+
+        </div>
+
+
+        <div class="echo-spark">
+          <svg
+            id="sparkSvg"
+            viewBox="0 0 600 56"
+            preserveAspectRatio="none">
+          </svg>
+        </div>
+
+
+        <div class="echo-controls">
+
+          <div class="echo-buttons">
+            <button class="echo-btn" id="playBtn" type="button">
+              Pause
+            </button>
+
+            <button class="echo-btn" id="resetBtn" type="button">
+              New pattern
+            </button>
+          </div>
+
+          <span class="echo-task">
+            population 40 · elite 4 · mutation-only evolution
+          </span>
+
+        </div>
+
+
+        <p class="echo-caption">
+          A simplified browser experiment using recurrent connections,
+          mutation and selection on toy two-dimensional classification
+          problems.
+        </p>
+
+      </div>
+
+    </article>
+
+  </main>
+
+
+  <footer>
+    <span>MOOMERKONES</span>
+
+    <a href="#top">↑ top</a>
+  </footer>
 
 </div>
 
+
 <script>
-(function(){
+(function () {
   "use strict";
 
-  // ---------- RNG / math ----------
-  function randn(){
-    let u=0,v=0;
-    while(u===0) u=Math.random();
-    while(v===0) v=Math.random();
-    return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
-  }
-  function relu(x){ return x>0?x:0; }
-  function sigmoid(x){ return 1/(1+Math.exp(-x)); }
-  function lerp(a,b,t){ return a+(b-a)*t; }
+  function randn() {
+    let u = 0;
+    let v = 0;
 
-  // ---------- Echo Network genome ----------
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+
+    return Math.sqrt(-2 * Math.log(u)) *
+           Math.cos(2 * Math.PI * v);
+  }
+
+  function relu(x) {
+    return x > 0 ? x : 0;
+  }
+
+  function sigmoid(x) {
+    return 1 / (1 + Math.exp(-x));
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+
   const MAX_NEURONS = 10;
 
-  function createInitialGenome(){
-    const roles=['input','input','bias','output'];
-    const n=roles.length;
-    const C=Array.from({length:n},()=>Array(n).fill(0));
-    for(let i=0;i<n;i++){
-      for(let j=0;j<n;j++){
-        if(roles[j]==='bias') continue;
-        if(i===j) continue;
-        if(Math.random()<0.6) C[i][j]=randn()*0.6;
-      }
-    }
-    return {roles,C,n};
-  }
 
-  function cloneGenome(g){
-    return {roles:g.roles.slice(), C:g.C.map(r=>r.slice()), n:g.n};
-  }
+  function createInitialGenome() {
 
-  function addNeuron(g){
-    const n=g.n;
-    g.roles.push('hidden');
-    for(let i=0;i<n;i++) g.C[i].push(Math.random()<0.5 ? randn()*0.5 : 0);
-    const row=Array.from({length:n+1},()=>Math.random()<0.5 ? randn()*0.5 : 0);
-    g.C.push(row);
-    g.n=n+1;
-  }
-
-  function removeNeuron(g){
-    const n=g.n;
-    const hidden=[];
-    for(let i=0;i<n;i++) if(g.roles[i]==='hidden') hidden.push(i);
-    if(!hidden.length) return;
-    const idx=hidden[Math.floor(Math.random()*hidden.length)];
-    g.roles.splice(idx,1);
-    g.C.splice(idx,1);
-    for(let i=0;i<g.C.length;i++) g.C[i].splice(idx,1);
-    g.n=n-1;
-  }
-
-  function mutate(parent){
-    const g=cloneGenome(parent);
-    const n=g.n;
-    const r=Math.random();
-    if(r<0.55){
-      const edits=1+Math.floor(Math.random()*3);
-      for(let k=0;k<edits;k++){
-        const i=Math.floor(Math.random()*n);
-        const j=Math.floor(Math.random()*n);
-        if(g.roles[j]==='bias') continue;
-        if(Math.random()<0.5) g.C[i][j]=randn()*0.6;
-        else g.C[i][j]+=randn()*0.3;
-      }
-    } else if(r<0.7 && g.n<MAX_NEURONS){
-      addNeuron(g);
-    } else if(r<0.8){
-      const i=Math.floor(Math.random()*n), j=Math.floor(Math.random()*n);
-      g.C[i][j]=0;
-    } else if(r<0.9){
-      const i=Math.floor(Math.random()*n), j=Math.floor(Math.random()*n);
-      if(g.roles[j]!=='bias') g.C[i][j]=randn()*0.6;
-    } else if(g.n>4){
-      removeNeuron(g);
-    }
-    return g;
-  }
-
-  function evaluatePoint(g,x,y){
-    const n=g.n;
-    let a=Array(n).fill(1);
-    const inputIdx=[];
-    let outputIdx=-1;
-    for(let i=0;i<n;i++){
-      if(g.roles[i]==='input') inputIdx.push(i);
-      if(g.roles[i]==='output') outputIdx=i;
-    }
-    const inputs=[x,y];
-    let lastOut=0;
-    const T=n;
-    for(let t=0;t<T;t++){
-      const z=Array(n).fill(0);
-      for(let j=0;j<n;j++){
-        let sum=0;
-        for(let i=0;i<n;i++) sum+=g.C[i][j]*a[i];
-        z[j]=sum;
-      }
-      inputIdx.forEach((idx,k)=>{ z[idx]+=inputs[k]; });
-      const newA=z.map((v,idx)=> g.roles[idx]==='bias' ? 1 : relu(v));
-      lastOut=z[outputIdx];
-      a=newA;
-    }
-    return sigmoid(lastOut);
-  }
-
-  function accuracy(g,data){
-    let correct=0;
-    for(const [x,y,label] of data){
-      const pred = evaluatePoint(g,x,y) >= 0.5 ? 1 : 0;
-      if(pred===label) correct++;
-    }
-    return correct/data.length;
-  }
-
-  // ---------- toy datasets ----------
-  const TASKS=['rings','xor','blobs'];
-  const TASK_LABELS={rings:'rings', xor:'checkerboard', blobs:'two blobs'};
-
-  function makeDataset(kind,n){
-    n=n||200;
-    const data=[];
-    for(let i=0;i<n;i++){
-      let x,y,label;
-      if(kind==='rings'){
-        label = Math.random()<0.5?0:1;
-        const r = label===0 ? Math.random()*0.4 : 0.62+Math.random()*0.35;
-        const th = Math.random()*Math.PI*2;
-        x=Math.cos(th)*r; y=Math.sin(th)*r;
-      } else if(kind==='xor'){
-        x=Math.random()*2-1; y=Math.random()*2-1;
-        label=(x*y>=0)?1:0;
-      } else {
-        label = Math.random()<0.5?0:1;
-        const c = label===0 ? -0.5 : 0.5;
-        x=Math.max(-1.05,Math.min(1.05, c+randn()*0.28));
-        y=Math.max(-1.05,Math.min(1.05, c+randn()*0.28));
-      }
-      data.push([x,y,label]);
-    }
-    return data;
-  }
-
-  function tournamentSelect(pop,fits,k){
-    k=k||3;
-    let best=-1,bestFit=-Infinity;
-    for(let i=0;i<k;i++){
-      const idx=Math.floor(Math.random()*pop.length);
-      if(fits[idx]>bestFit){ bestFit=fits[idx]; best=idx; }
-    }
-    return pop[best];
-  }
-
-  // ---------- rendering ----------
-  const TEAL_RGB=[26,55,52], ROSE_RGB=[46,27,30]; // muted heatmap endpoints
-  function lerpColor(t){
-    return [
-      Math.round(lerp(TEAL_RGB[0],ROSE_RGB[0],t)),
-      Math.round(lerp(TEAL_RGB[1],ROSE_RGB[1],t)),
-      Math.round(lerp(TEAL_RGB[2],ROSE_RGB[2],t))
+    const roles = [
+      "input",
+      "input",
+      "bias",
+      "output"
     ];
-  }
 
-  const boundaryCanvas=document.getElementById('boundaryCanvas');
-  const bctx=boundaryCanvas.getContext('2d');
-  const offCanvas=document.createElement('canvas');
-  const GRID=48;
-  offCanvas.width=GRID; offCanvas.height=GRID;
-  const octx=offCanvas.getContext('2d');
+    const n = roles.length;
 
-  function renderBoundary(genome,dataset){
-    const img=octx.createImageData(GRID,GRID);
-    for(let gy=0; gy<GRID; gy++){
-      for(let gx=0; gx<GRID; gx++){
-        const x=(gx/(GRID-1))*2.3-1.15;
-        const y=(gy/(GRID-1))*2.3-1.15;
-        const p=evaluatePoint(genome,x,y);
-        const [r,gg,b]=lerpColor(p);
-        const idx=(gy*GRID+gx)*4;
-        img.data[idx]=r; img.data[idx+1]=gg; img.data[idx+2]=b; img.data[idx+3]=255;
-      }
-    }
-    octx.putImageData(img,0,0);
+    const C = Array.from(
+      { length: n },
+      () => Array(n).fill(0)
+    );
 
-    const W=boundaryCanvas.width, H=boundaryCanvas.height;
-    bctx.imageSmoothingEnabled=false;
-    bctx.clearRect(0,0,W,H);
-    bctx.drawImage(offCanvas,0,0,GRID,GRID,0,0,W,H);
+    for (let i = 0; i < n; i++) {
 
-    dataset.forEach(function(pt){
-      const x=pt[0], y=pt[1], label=pt[2];
-      const px=((x+1.15)/2.3)*W;
-      const py=((y+1.15)/2.3)*H;
-      bctx.beginPath();
-      bctx.arc(px,py,Math.max(3,W*0.011),0,Math.PI*2);
-      bctx.fillStyle = label===0 ? '#4FC7B5' : '#D9707B';
-      bctx.strokeStyle = 'rgba(14,17,22,0.85)';
-      bctx.lineWidth = W*0.004;
-      bctx.fill();
-      bctx.stroke();
-    });
-  }
+      for (let j = 0; j < n; j++) {
 
-  const graphSvg=document.getElementById('graphSvg');
-  const ROLE_COLOR={input:'var(--teal)', output:'var(--amber)', bias:'var(--violet)', hidden:'var(--muted)'};
+        if (roles[j] === "bias") continue;
+        if (i === j) continue;
 
-  function renderGraph(genome){
-    const n=genome.n;
-    const W=300,H=300,cx=150,cy=150,R=100;
-    const pos=[];
-    for(let i=0;i<n;i++){
-      const angle=-Math.PI/2 + (i/n)*Math.PI*2;
-      pos.push([cx+R*Math.cos(angle), cy+R*Math.sin(angle)]);
-    }
-    let maxAbs=0;
-    for(let i=0;i<n;i++) for(let j=0;j<n;j++) maxAbs=Math.max(maxAbs,Math.abs(genome.C[i][j]));
-    maxAbs=maxAbs||1;
-
-    let edges='';
-    for(let i=0;i<n;i++){
-      for(let j=0;j<n;j++){
-        const w=genome.C[i][j];
-        if(w===0) continue;
-        const mag=Math.abs(w)/maxAbs;
-        const width=(0.6+mag*3.0).toFixed(2);
-        const color= w>0 ? 'var(--amber)' : 'var(--teal)';
-        const opacity=(0.22+mag*0.68).toFixed(2);
-        if(i===j){
-          const p=pos[i];
-          const lx=(p[0]+(p[0]-cx)*0.22).toFixed(1);
-          const ly=(p[1]+(p[1]-cy)*0.22).toFixed(1);
-          edges += '<circle cx="'+lx+'" cy="'+ly+'" r="7" fill="none" stroke="'+color+'" stroke-width="'+width+'" opacity="'+opacity+'" />';
-        } else {
-          const p1=pos[i], p2=pos[j];
-          const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
-          const dx=p2[0]-p1[0], dy=p2[1]-p1[1];
-          const norm=Math.hypot(dx,dy)||1;
-          const nx=-dy/norm, ny=dx/norm;
-          const cxp=(mx+nx*12).toFixed(1), cyp=(my+ny*12).toFixed(1);
-          edges += '<path d="M '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+' Q '+cxp+' '+cyp+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1)+'" fill="none" stroke="'+color+'" stroke-width="'+width+'" opacity="'+opacity+'" stroke-linecap="round"/>';
+        if (Math.random() < 0.6) {
+          C[i][j] = randn() * 0.6;
         }
       }
     }
 
-    let nodes='';
-    for(let i=0;i<n;i++){
-      const p=pos[i];
-      const c=ROLE_COLOR[genome.roles[i]];
-      nodes += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="7.5" fill="'+c+'" stroke="var(--bg)" stroke-width="2.5"/>';
+    return {
+      roles,
+      C,
+      n
+    };
+  }
+
+
+  function cloneGenome(g) {
+
+    return {
+      roles: g.roles.slice(),
+      C: g.C.map(row => row.slice()),
+      n: g.n
+    };
+  }
+
+
+  function addNeuron(g) {
+
+    const n = g.n;
+
+    g.roles.push("hidden");
+
+    for (let i = 0; i < n; i++) {
+
+      g.C[i].push(
+        Math.random() < 0.5
+          ? randn() * 0.5
+          : 0
+      );
     }
-    graphSvg.innerHTML = edges + nodes;
+
+    const row = Array.from(
+      { length: n + 1 },
+      () =>
+        Math.random() < 0.5
+          ? randn() * 0.5
+          : 0
+    );
+
+    g.C.push(row);
+
+    g.n = n + 1;
   }
 
-  const sparkSvg=document.getElementById('sparkSvg');
-  function renderSpark(history){
-    const win=history.slice(-150);
-    if(win.length<2){ sparkSvg.innerHTML=''; return; }
-    const W=600,H=56;
-    const pts=win.map(function(v,i){
-      const x=(i/(win.length-1))*W;
-      const y=H-4-v*(H-8);
-      return x.toFixed(1)+','+y.toFixed(1);
-    }).join(' ');
-    sparkSvg.innerHTML='<polyline points="'+pts+'" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+
+  function removeNeuron(g) {
+
+    const hidden = [];
+
+    for (let i = 0; i < g.n; i++) {
+
+      if (g.roles[i] === "hidden") {
+        hidden.push(i);
+      }
+    }
+
+    if (!hidden.length) return;
+
+    const idx =
+      hidden[
+        Math.floor(
+          Math.random() * hidden.length
+        )
+      ];
+
+    g.roles.splice(idx, 1);
+    g.C.splice(idx, 1);
+
+    for (let i = 0; i < g.C.length; i++) {
+      g.C[i].splice(idx, 1);
+    }
+
+    g.n--;
   }
 
-  // ---------- main loop ----------
-  const POP=40, ELITES=4, SAMPLE=80;
-  let taskIdx=0;
-  let genDataset=makeDataset(TASKS[taskIdx],200);
-  let population=Array.from({length:POP},createInitialGenome);
-  let generation=0;
-  let history=[];
-  let bestGenome=population[0];
-  let playing=true;
-  let timer=null;
 
-  const statGen=document.getElementById('statGen');
-  const statAcc=document.getElementById('statAcc');
-  const statN=document.getElementById('statN');
-  const statW=document.getElementById('statW');
-  const taskLabel=document.getElementById('taskLabel');
-  const playBtn=document.getElementById('playBtn');
-  const resetBtn=document.getElementById('resetBtn');
-  const statusPill=document.getElementById('statusPill');
-  const statusText=document.getElementById('statusText');
+  function mutate(parent) {
 
-  function draw(fullAcc){
-    renderBoundary(bestGenome,genDataset);
-    renderGraph(bestGenome);
-    renderSpark(history);
-    let nonzero=0;
-    for(let i=0;i<bestGenome.n;i++) for(let j=0;j<bestGenome.n;j++) if(bestGenome.C[i][j]!==0) nonzero++;
-    statGen.textContent=String(generation).padStart(4,'0');
-    statAcc.textContent=(fullAcc*100).toFixed(1)+'%';
-    statN.textContent=String(bestGenome.n).padStart(2,'0');
-    statW.textContent=String(nonzero).padStart(3,'0');
+    const g = cloneGenome(parent);
+
+    const n = g.n;
+    const r = Math.random();
+
+
+    if (r < 0.55) {
+
+      const edits =
+        1 + Math.floor(Math.random() * 3);
+
+      for (let k = 0; k < edits; k++) {
+
+        const i =
+          Math.floor(Math.random() * n);
+
+        const j =
+          Math.floor(Math.random() * n);
+
+        if (g.roles[j] === "bias") continue;
+
+        if (Math.random() < 0.5) {
+
+          g.C[i][j] =
+            randn() * 0.6;
+
+        } else {
+
+          g.C[i][j] +=
+            randn() * 0.3;
+        }
+      }
+
+    } else if (
+      r < 0.7 &&
+      g.n < MAX_NEURONS
+    ) {
+
+      addNeuron(g);
+
+    } else if (r < 0.8) {
+
+      const i =
+        Math.floor(Math.random() * n);
+
+      const j =
+        Math.floor(Math.random() * n);
+
+      g.C[i][j] = 0;
+
+    } else if (r < 0.9) {
+
+      const i =
+        Math.floor(Math.random() * n);
+
+      const j =
+        Math.floor(Math.random() * n);
+
+      if (g.roles[j] !== "bias") {
+        g.C[i][j] = randn() * 0.6;
+      }
+
+    } else if (g.n > 4) {
+
+      removeNeuron(g);
+    }
+
+    return g;
   }
 
-  function step(){
-    const sample=[];
-    for(let i=0;i<SAMPLE;i++) sample.push(genDataset[Math.floor(Math.random()*genDataset.length)]);
-    const fits=population.map(function(g){ return accuracy(g,sample); });
-    const order=fits.map(function(f,i){ return i; }).sort(function(a,b){ return fits[b]-fits[a]; });
-    const sortedPop=order.map(function(i){ return population[i]; });
-    const newPop=[];
-    for(let e=0;e<ELITES;e++) newPop.push(cloneGenome(sortedPop[e]));
-    while(newPop.length<POP) newPop.push(mutate(tournamentSelect(population,fits)));
-    population=newPop;
-    bestGenome=sortedPop[0];
-    const fullAcc=accuracy(bestGenome,genDataset);
-    history.push(fullAcc);
-    if(history.length>400) history.shift();
+
+  function evaluatePoint(g, x, y) {
+
+    const n = g.n;
+
+    let a = Array(n).fill(1);
+
+    const inputIdx = [];
+
+    let outputIdx = -1;
+
+
+    for (let i = 0; i < n; i++) {
+
+      if (g.roles[i] === "input") {
+        inputIdx.push(i);
+      }
+
+      if (g.roles[i] === "output") {
+        outputIdx = i;
+      }
+    }
+
+
+    const inputs = [x, y];
+
+    let lastOut = 0;
+
+
+    for (let t = 0; t < n; t++) {
+
+      const z = Array(n).fill(0);
+
+
+      for (let j = 0; j < n; j++) {
+
+        let sum = 0;
+
+        for (let i = 0; i < n; i++) {
+          sum += g.C[i][j] * a[i];
+        }
+
+        z[j] = sum;
+      }
+
+
+      inputIdx.forEach(
+        (idx, k) => {
+          z[idx] += inputs[k];
+        }
+      );
+
+
+      const newA =
+        z.map(
+          (value, idx) =>
+            g.roles[idx] === "bias"
+              ? 1
+              : relu(value)
+        );
+
+
+      lastOut = z[outputIdx];
+
+      a = newA;
+    }
+
+
+    return sigmoid(lastOut);
+  }
+
+
+  function accuracy(g, data) {
+
+    let correct = 0;
+
+    for (const [x, y, label] of data) {
+
+      const pred =
+        evaluatePoint(g, x, y) >= 0.5
+          ? 1
+          : 0;
+
+      if (pred === label) {
+        correct++;
+      }
+    }
+
+    return correct / data.length;
+  }
+
+
+  const TASKS = [
+    "rings",
+    "xor",
+    "blobs"
+  ];
+
+
+  const TASK_LABELS = {
+    rings: "rings",
+    xor: "checkerboard",
+    blobs: "two blobs"
+  };
+
+
+  function makeDataset(kind, n = 200) {
+
+    const data = [];
+
+
+    for (let i = 0; i < n; i++) {
+
+      let x;
+      let y;
+      let label;
+
+
+      if (kind === "rings") {
+
+        label =
+          Math.random() < 0.5
+            ? 0
+            : 1;
+
+        const r =
+          label === 0
+            ? Math.random() * 0.4
+            : 0.62 +
+              Math.random() * 0.35;
+
+        const th =
+          Math.random() *
+          Math.PI *
+          2;
+
+        x = Math.cos(th) * r;
+        y = Math.sin(th) * r;
+
+
+      } else if (kind === "xor") {
+
+        x = Math.random() * 2 - 1;
+        y = Math.random() * 2 - 1;
+
+        label =
+          x * y >= 0
+            ? 1
+            : 0;
+
+
+      } else {
+
+        label =
+          Math.random() < 0.5
+            ? 0
+            : 1;
+
+        const c =
+          label === 0
+            ? -0.5
+            : 0.5;
+
+        x = Math.max(
+          -1.05,
+          Math.min(
+            1.05,
+            c + randn() * 0.28
+          )
+        );
+
+        y = Math.max(
+          -1.05,
+          Math.min(
+            1.05,
+            c + randn() * 0.28
+          )
+        );
+      }
+
+
+      data.push([
+        x,
+        y,
+        label
+      ]);
+    }
+
+
+    return data;
+  }
+
+
+  function tournamentSelect(
+    pop,
+    fits,
+    k = 3
+  ) {
+
+    let best = -1;
+    let bestFit = -Infinity;
+
+
+    for (let i = 0; i < k; i++) {
+
+      const idx =
+        Math.floor(
+          Math.random() *
+          pop.length
+        );
+
+      if (fits[idx] > bestFit) {
+
+        bestFit =
+          fits[idx];
+
+        best =
+          idx;
+      }
+    }
+
+
+    return pop[best];
+  }
+
+
+  const boundaryCanvas =
+    document.getElementById(
+      "boundaryCanvas"
+    );
+
+  const bctx =
+    boundaryCanvas.getContext("2d");
+
+
+  const offCanvas =
+    document.createElement("canvas");
+
+  const GRID = 48;
+
+  offCanvas.width = GRID;
+  offCanvas.height = GRID;
+
+
+  const octx =
+    offCanvas.getContext("2d");
+
+
+  function renderBoundary(
+    genome,
+    dataset
+  ) {
+
+    const img =
+      octx.createImageData(
+        GRID,
+        GRID
+      );
+
+
+    for (let gy = 0; gy < GRID; gy++) {
+
+      for (
+        let gx = 0;
+        gx < GRID;
+        gx++
+      ) {
+
+        const x =
+          gx /
+          (GRID - 1) *
+          2.3 -
+          1.15;
+
+        const y =
+          gy /
+          (GRID - 1) *
+          2.3 -
+          1.15;
+
+        const p =
+          evaluatePoint(
+            genome,
+            x,
+            y
+          );
+
+
+        const r =
+          Math.round(
+            lerp(
+              26,
+              46,
+              p
+            )
+          );
+
+        const g =
+          Math.round(
+            lerp(
+              55,
+              27,
+              p
+            )
+          );
+
+        const b =
+          Math.round(
+            lerp(
+              52,
+              30,
+              p
+            )
+          );
+
+
+        const idx =
+          (gy * GRID + gx) * 4;
+
+        img.data[idx] = r;
+        img.data[idx + 1] = g;
+        img.data[idx + 2] = b;
+        img.data[idx + 3] = 255;
+      }
+    }
+
+
+    octx.putImageData(
+      img,
+      0,
+      0
+    );
+
+
+    const W =
+      boundaryCanvas.width;
+
+    const H =
+      boundaryCanvas.height;
+
+
+    bctx.imageSmoothingEnabled =
+      false;
+
+    bctx.clearRect(
+      0,
+      0,
+      W,
+      H
+    );
+
+    bctx.drawImage(
+      offCanvas,
+      0,
+      0,
+      GRID,
+      GRID,
+      0,
+      0,
+      W,
+      H
+    );
+
+
+    dataset.forEach(
+      function (pt) {
+
+        const x = pt[0];
+        const y = pt[1];
+        const label = pt[2];
+
+
+        const px =
+          ((x + 1.15) / 2.3) *
+          W;
+
+        const py =
+          ((y + 1.15) / 2.3) *
+          H;
+
+
+        bctx.beginPath();
+
+        bctx.arc(
+          px,
+          py,
+          Math.max(
+            3,
+            W * .011
+          ),
+          0,
+          Math.PI * 2
+        );
+
+
+        bctx.fillStyle =
+          label === 0
+            ? "#4fc7b5"
+            : "#d9707b";
+
+        bctx.strokeStyle =
+          "#0e1116";
+
+        bctx.lineWidth =
+          W * .004;
+
+
+        bctx.fill();
+        bctx.stroke();
+      }
+    );
+  }
+
+
+  const graphSvg =
+    document.getElementById(
+      "graphSvg"
+    );
+
+
+  const ROLE_COLOR = {
+    input: "#4fc7b5",
+    output: "#e8a33d",
+    bias: "#8b7fd6",
+    hidden: "#8992a4"
+  };
+
+
+  function renderGraph(genome) {
+
+    const n = genome.n;
+
+    const cx = 150;
+    const cy = 150;
+    const R = 100;
+
+    const pos = [];
+
+
+    for (let i = 0; i < n; i++) {
+
+      const angle =
+        -Math.PI / 2 +
+        i / n *
+        Math.PI *
+        2;
+
+      pos.push([
+        cx + R * Math.cos(angle),
+        cy + R * Math.sin(angle)
+      ]);
+    }
+
+
+    let maxAbs = 0;
+
+
+    for (let i = 0; i < n; i++) {
+
+      for (let j = 0; j < n; j++) {
+
+        maxAbs =
+          Math.max(
+            maxAbs,
+            Math.abs(
+              genome.C[i][j]
+            )
+          );
+      }
+    }
+
+
+    maxAbs =
+      maxAbs || 1;
+
+
+    let edges = "";
+
+
+    for (let i = 0; i < n; i++) {
+
+      for (let j = 0; j < n; j++) {
+
+        const w =
+          genome.C[i][j];
+
+        if (w === 0) continue;
+
+
+        const mag =
+          Math.abs(w) /
+          maxAbs;
+
+        const width =
+          .6 +
+          mag *
+          3;
+
+        const color =
+          w > 0
+            ? "#e8a33d"
+            : "#4fc7b5";
+
+        const opacity =
+          .22 +
+          mag *
+          .68;
+
+
+        const p1 =
+          pos[i];
+
+        const p2 =
+          pos[j];
+
+
+        edges +=
+          `<line
+            x1="${p1[0]}"
+            y1="${p1[1]}"
+            x2="${p2[0]}"
+            y2="${p2[1]}"
+            stroke="${color}"
+            stroke-width="${width}"
+            opacity="${opacity}"
+          />`;
+      }
+    }
+
+
+    let nodes = "";
+
+
+    for (let i = 0; i < n; i++) {
+
+      const p =
+        pos[i];
+
+      nodes +=
+        `<circle
+          cx="${p[0]}"
+          cy="${p[1]}"
+          r="7"
+          fill="${ROLE_COLOR[genome.roles[i]]}"
+          stroke="#0e1116"
+          stroke-width="2"
+        />`;
+    }
+
+
+    graphSvg.innerHTML =
+      edges +
+      nodes;
+  }
+
+
+  const sparkSvg =
+    document.getElementById(
+      "sparkSvg"
+    );
+
+
+  function renderSpark(history) {
+
+    const win =
+      history.slice(-150);
+
+
+    if (win.length < 2) {
+
+      sparkSvg.innerHTML = "";
+      return;
+    }
+
+
+    const W = 600;
+    const H = 56;
+
+
+    const points =
+      win.map(
+        function (value, i) {
+
+          const x =
+            i /
+            (win.length - 1) *
+            W;
+
+          const y =
+            H -
+            4 -
+            value *
+            (H - 8);
+
+          return `${x},${y}`;
+        }
+      ).join(" ");
+
+
+    sparkSvg.innerHTML =
+      `<polyline
+        points="${points}"
+        fill="none"
+        stroke="#e8a33d"
+        stroke-width="2"
+      />`;
+  }
+
+
+  const POP = 40;
+  const ELITES = 4;
+  const SAMPLE = 80;
+
+
+  let taskIdx = 0;
+
+  let dataset =
+    makeDataset(
+      TASKS[taskIdx]
+    );
+
+  let population =
+    Array.from(
+      { length: POP },
+      createInitialGenome
+    );
+
+  let generation = 0;
+  let history = [];
+
+  let bestGenome =
+    population[0];
+
+  let playing = true;
+  let timer = null;
+
+
+  const statGen =
+    document.getElementById(
+      "statGen"
+    );
+
+  const statAcc =
+    document.getElementById(
+      "statAcc"
+    );
+
+  const statN =
+    document.getElementById(
+      "statN"
+    );
+
+  const statW =
+    document.getElementById(
+      "statW"
+    );
+
+  const taskLabel =
+    document.getElementById(
+      "taskLabel"
+    );
+
+  const playBtn =
+    document.getElementById(
+      "playBtn"
+    );
+
+  const resetBtn =
+    document.getElementById(
+      "resetBtn"
+    );
+
+  const statusText =
+    document.getElementById(
+      "statusText"
+    );
+
+
+  function draw(fullAcc) {
+
+    renderBoundary(
+      bestGenome,
+      dataset
+    );
+
+    renderGraph(
+      bestGenome
+    );
+
+    renderSpark(
+      history
+    );
+
+
+    let nonzero = 0;
+
+
+    for (
+      let i = 0;
+      i < bestGenome.n;
+      i++
+    ) {
+
+      for (
+        let j = 0;
+        j < bestGenome.n;
+        j++
+      ) {
+
+        if (
+          bestGenome.C[i][j] !== 0
+        ) {
+          nonzero++;
+        }
+      }
+    }
+
+
+    statGen.textContent =
+      String(
+        generation
+      ).padStart(
+        4,
+        "0"
+      );
+
+    statAcc.textContent =
+      (
+        fullAcc *
+        100
+      ).toFixed(1) +
+      "%";
+
+    statN.textContent =
+      String(
+        bestGenome.n
+      ).padStart(
+        2,
+        "0"
+      );
+
+    statW.textContent =
+      String(
+        nonzero
+      ).padStart(
+        3,
+        "0"
+      );
+  }
+
+
+  function step() {
+
+    const sample = [];
+
+
+    for (
+      let i = 0;
+      i < SAMPLE;
+      i++
+    ) {
+
+      sample.push(
+        dataset[
+          Math.floor(
+            Math.random() *
+            dataset.length
+          )
+        ]
+      );
+    }
+
+
+    const fits =
+      population.map(
+        g =>
+          accuracy(
+            g,
+            sample
+          )
+      );
+
+
+    const order =
+      fits.map(
+        (_, i) => i
+      ).sort(
+        (a, b) =>
+          fits[b] -
+          fits[a]
+      );
+
+
+    const sortedPop =
+      order.map(
+        i =>
+          population[i]
+      );
+
+
+    const newPop = [];
+
+
+    for (
+      let e = 0;
+      e < ELITES;
+      e++
+    ) {
+
+      newPop.push(
+        cloneGenome(
+          sortedPop[e]
+        )
+      );
+    }
+
+
+    while (
+      newPop.length < POP
+    ) {
+
+      newPop.push(
+        mutate(
+          tournamentSelect(
+            population,
+            fits
+          )
+        )
+      );
+    }
+
+
+    population =
+      newPop;
+
+    bestGenome =
+      sortedPop[0];
+
+
+    const fullAcc =
+      accuracy(
+        bestGenome,
+        dataset
+      );
+
+
+    history.push(
+      fullAcc
+    );
+
+
+    if (
+      history.length > 400
+    ) {
+      history.shift();
+    }
+
+
     generation++;
-    draw(fullAcc);
+
+    draw(
+      fullAcc
+    );
   }
 
-  function startLoop(){
-    if(timer) return;
-    timer=setInterval(step,90);
-  }
-  function stopLoop(){
-    clearInterval(timer);
-    timer=null;
-  }
-  function updatePlayUI(){
-    playBtn.textContent = playing ? '⏸ Pause' : '▶ Resume';
-    statusText.textContent = playing ? 'LIVE' : 'PAUSED';
-    statusPill.classList.toggle('is-live', playing);
+
+  function startLoop() {
+
+    if (timer) return;
+
+    timer =
+      setInterval(
+        step,
+        90
+      );
   }
 
-  playBtn.addEventListener('click', function(){
-    playing=!playing;
-    if(playing) startLoop(); else stopLoop();
-    updatePlayUI();
-  });
 
-  resetBtn.addEventListener('click', function(){
-    taskIdx=(taskIdx+1)%TASKS.length;
-    genDataset=makeDataset(TASKS[taskIdx],200);
-    taskLabel.textContent='Decision boundary — '+TASK_LABELS[TASKS[taskIdx]];
-    population=Array.from({length:POP},createInitialGenome);
-    generation=0;
-    history=[];
-    bestGenome=population[0];
-    draw(accuracy(bestGenome,genDataset));
-    if(!playing){ playing=true; startLoop(); updatePlayUI(); }
-  });
+  function stopLoop() {
 
-  draw(accuracy(bestGenome,genDataset));
-  updatePlayUI();
+    clearInterval(
+      timer
+    );
+
+    timer = null;
+  }
+
+
+  playBtn.addEventListener(
+    "click",
+    function () {
+
+      playing =
+        !playing;
+
+
+      if (playing) {
+
+        startLoop();
+
+        playBtn.textContent =
+          "Pause";
+
+        statusText.textContent =
+          "LIVE";
+
+      } else {
+
+        stopLoop();
+
+        playBtn.textContent =
+          "Resume";
+
+        statusText.textContent =
+          "PAUSED";
+      }
+    }
+  );
+
+
+  resetBtn.addEventListener(
+    "click",
+    function () {
+
+      taskIdx =
+        (taskIdx + 1) %
+        TASKS.length;
+
+
+      dataset =
+        makeDataset(
+          TASKS[taskIdx]
+        );
+
+
+      taskLabel.textContent =
+        "Decision boundary — " +
+        TASK_LABELS[
+          TASKS[taskIdx]
+        ];
+
+
+      population =
+        Array.from(
+          { length: POP },
+          createInitialGenome
+        );
+
+
+      generation = 0;
+      history = [];
+
+      bestGenome =
+        population[0];
+
+
+      draw(
+        accuracy(
+          bestGenome,
+          dataset
+        )
+      );
+
+
+      if (!playing) {
+
+        playing = true;
+
+        playBtn.textContent =
+          "Pause";
+
+        statusText.textContent =
+          "LIVE";
+
+        startLoop();
+      }
+    }
+  );
+
+
+  draw(
+    accuracy(
+      bestGenome,
+      dataset
+    )
+  );
+
   startLoop();
+
 })();
 </script>
 
